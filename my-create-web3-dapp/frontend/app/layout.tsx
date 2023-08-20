@@ -1,17 +1,17 @@
 "use client";
 import { WagmiConfig, createConfig, Chain } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { mainnet, polygon, optimism, arbitrum, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import Navbar from "@/components/instructionsComponent/navigation/navbar";
 import Footer from "@/components/instructionsComponent/navigation/footer";
 
-const chains = [mainnet, polygon, optimism, arbitrum, sepolia];
+const chains = [sepolia];
 
 const config = createConfig(
   getDefaultConfig({
     // Required API Keys
     alchemyId: process.env.ALCHEMY_API_KEY, // or infuraId
-    walletConnectProjectId: "demo",
+    walletConnectProjectId: "2b79e36fd21f4aa09a4a9793dbb30ebb",
 
     // Required
     appName: "You Create Web3 Dapp",

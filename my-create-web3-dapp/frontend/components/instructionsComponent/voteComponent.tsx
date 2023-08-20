@@ -1,7 +1,13 @@
 import config from "../../../backend/artifacts/contracts/TokenizedBallot.sol/TokenizedBallot.json";
-import { useState } from "react";
-import styles from "./instructionsComponent.module.css";
-import React from "react";
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Box from "@mui/material/Box";
 import { useContractWrite } from "wagmi";
 
 const contractConfig = {
@@ -13,8 +19,8 @@ function VoteComponent() {
   const [voteAmount, setVoteAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
-    address: "0x36568e371Ab51Fa70FF8A3Ac524cAe0B8bBD9BA7",
+  const { write } = useContractWrite({
+    address: "0x36568e371Ab51Fa70FF8A3Ac524cAe0B8bBD9BA7", // Update with your contract address
     abi: contractConfig.abi,
     functionName: "vote",
   });
@@ -24,7 +30,7 @@ function VoteComponent() {
       await write({
         args: [selectedProposal, Number(voteAmount)],
       });
-      // Reset form fields after successful vote
+      // Reset form fields after a successful vote
       setSelectedProposal(0);
       setVoteAmount("");
       setErrorMessage("");
@@ -34,32 +40,50 @@ function VoteComponent() {
   };
 
   return (
-    <div>
-      <h2>Vote Component</h2>
-      <div>
-        <label>Select Proposal:</label>
-        <select
+    <Box mt={2} display="flex" flexDirection="column" alignItems="center">
+      <Typography variant="h4" gutterBottom>
+        Vote Component
+      </Typography>
+      <FormControl variant="outlined" fullWidth sx={{ width: "50%" }}>
+        <InputLabel>Select Proposal</InputLabel>
+        <Select
           value={selectedProposal}
           onChange={(e) => setSelectedProposal(Number(e.target.value))}
+          label="Select Proposal"
         >
-          <option value={0}>Proposal 1</option>
-          <option value={1}>Proposal 2</option>
-          {/* Add more options for each proposal */}
-        </select>
-      </div>
-      <div>
-        <label>Vote Amount:</label>
-        <input
-          type="number"
-          value={voteAmount}
-          onChange={(e) => setVoteAmount(e.target.value)}
-        />
-      </div>
-      <div>
-        <button onClick={handleVote}>Vote</button>
-      </div>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-    </div>
+          <MenuItem value={0}>Proposal 1</MenuItem>
+          <MenuItem value={1}>Proposal 2</MenuItem>
+        </Select>
+      </FormControl>
+      <TextField
+        label="Vote Amount"
+        type="number"
+        value={voteAmount}
+        onChange={(e) => setVoteAmount(e.target.value)}
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        sx={{ width: "50%" }}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleVote}
+        sx={{ width: "50%" }}
+      >
+        Vote
+      </Button>
+      {errorMessage && (
+        <Typography
+          color="error"
+          variant="body2"
+          gutterBottom
+          sx={{ width: "50%" }}
+        >
+          {errorMessage}
+        </Typography>
+      )}
+    </Box>
   );
 }
 
