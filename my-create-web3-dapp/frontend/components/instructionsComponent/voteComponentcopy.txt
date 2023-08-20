@@ -1,33 +1,30 @@
 import config from "../../../backend/artifacts/contracts/TokenizedBallot.sol/TokenizedBallot.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./instructionsComponent.module.css";
 import React from "react";
-import { useContractWrite } from "wagmi";
+import { getContract } from "@wagmi/core";
 
 const contractConfig = {
   abi: config.abi,
 };
+
+const contract = getContract({
+  address: "0x22482542fFE728d2B5E800cEb79E8DE61cC29c70",
+  abi: contractConfig.abi,
+});
 
 function VoteComponent() {
   const [selectedProposal, setSelectedProposal] = useState(0);
   const [voteAmount, setVoteAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
-    address: "0x36568e371Ab51Fa70FF8A3Ac524cAe0B8bBD9BA7",
-    abi: contractConfig.abi,
-    functionName: "vote",
-  });
-
   const handleVote = async () => {
     try {
-      await write({
-        args: [selectedProposal, Number(voteAmount)],
-      });
+      await contract.vote(selectedProposal, voteAmount); //TODO fix type error Property 'vote' does not exist on type 'GetContractResult<({ inputs:...
+      setErrorMessage("");
       // Reset form fields after successful vote
       setSelectedProposal(0);
       setVoteAmount("");
-      setErrorMessage("");
     } catch (error) {
       setErrorMessage("Error casting vote. Please try again.");
     }
@@ -62,5 +59,4 @@ function VoteComponent() {
     </div>
   );
 }
-
 export default VoteComponent;
