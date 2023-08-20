@@ -32,6 +32,24 @@
 $ yarn install
 ```
 
+## Installing database
+```bash
+#install database
+$ sudo apt-get install mysql-server
+
+#enter mysql
+$ sudo service mysql start
+$ mysql -u root -p
+
+#create api user
+$ CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+$ GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
+$ FLUSH PRIVILEGES;
+
+#create table
+$ CREATE TABLE test;
+```
+
 ## Running the app
 
 ```bash
